@@ -1,0 +1,4 @@
+zone "aula.net" {
+    type master;
+    file "/etc/bind/zones/db.aula.net";
+};

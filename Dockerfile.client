@@ -1,0 +1,9 @@
+#
+# Cliente simples na mesma rede para interagir com o servidor
+#
+
+FROM alpine
+
+RUN apk add --no-cache --update curl bash
+
+CMD ["tail", "-f", "/dev/null"]

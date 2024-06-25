@@ -1,0 +1,31 @@
+#
+# Servidor Debian
+#
+
+FROM debian
+
+# Instalar pacotes
+RUN apt-get update && apt-get install -y wget bind9 bind9utils bind9-doc apache2
+
+# Download webmin
+RUN wget -q https://www.webmin.com/download/deb/webmin-current.deb
+
+# Instalar webmin
+RUN apt-get install -y --install-recommends ./webmin-current.deb
+
+# Config bind
+COPY bind/named.conf.options /etc/bind/
+COPY bind/named.conf.local /etc/bind/
+COPY bind/db.aula.net /etc/bind/zones/
+
+# Config apache
+COPY apache/aula.net.conf /etc/apache2/sites-available/aula.net.conf
+COPY apache/index.html /var/www/html/index.html
+
+RUN a2ensite aula.net.conf
+
+# Script "entrypoint" dos serviços
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
+CMD ["/usr/local/bin/entrypoint.sh"]

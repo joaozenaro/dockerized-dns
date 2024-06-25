@@ -1,0 +1,31 @@
+services:
+  debian:
+    container_name: server
+    build:
+      context: .
+      dockerfile: Dockerfile.server
+    networks:
+      bridgenet:
+        ipv4_address: 172.0.0.2
+    ports:
+      - "80:80"
+      - "10000:10000"
+
+  client:
+    container_name: client
+    build:
+      context: .
+      dockerfile: Dockerfile.client
+    networks:
+      bridgenet:
+        ipv4_address: 172.0.0.3
+    dns:
+      - 172.0.0.2
+
+networks:
+  bridgenet:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.0.0.0/16
+          gateway: 172.0.0.254
